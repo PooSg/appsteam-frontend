@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { getGame, addToCart, getOrders } from '../services/api'
+import { getGame, addToCart, getOrders, addToWishlist, removeFromWishlist, getWishlist } from '../services/api'
 
 export default function GameDetail() {
   const { id } = useParams()
@@ -10,12 +11,16 @@ export default function GameDetail() {
   const [adding, setAdding]   = useState(false)
   const [added, setAdded]     = useState(false)
   const [owned, setOwned]     = useState(false)
+  const [wishlisted, setWishlisted] = useState(false)
 
   useEffect(() => {
     getGame(id)
       .then(res => setGame(res.data))
       .catch(() => navigate('/'))
       .finally(() => setLoading(false))
+     getWishlist().then(res => {
+  setWishlisted(res.data.some(w => String(w.game_id) === String(id)))
+}).catch(() => {}) 
 
     getOrders().then(res => {
       const allItems = res.data.flatMap(o => o.items || [])
@@ -36,7 +41,19 @@ export default function GameDetail() {
       setAdding(false)
     }
   }
-
+  async function handleWishlist() {
+  try {
+    if (wishlisted) {
+      await removeFromWishlist(id)
+      setWishlisted(false)
+    } else {
+      await addToWishlist(id)
+      setWishlisted(true)
+    }
+  } catch (err) {
+    alert(err.response?.data?.message || 'Could not update wishlist')
+  }
+}
   if (loading) return <div className="text-center mt-20 text-muted">Loading...</div>
   if (!game)   return null
 
@@ -107,7 +124,12 @@ export default function GameDetail() {
                 {added ? '✓ Added to cart!' : adding ? 'Adding...' : 'Add to cart'}
               </button>
             )}
-            <button className="btn-outline">+ Wishlist</button>
+            <button
+                onClick={handleWishlist}
+                  className="btn-outline"
+                                          >
+                  {wishlisted ? '♥ Wishlisted' : '+ Wishlist'}
+              </button>
           </div>
 
           {/* Info card */}
