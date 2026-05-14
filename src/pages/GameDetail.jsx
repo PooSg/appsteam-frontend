@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { getGame, addToCart, getOrders } from '../services/api'
 import { getGame, addToCart, getOrders, addToWishlist, removeFromWishlist, getWishlist } from '../services/api'
 
 export default function GameDetail() {
