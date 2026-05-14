@@ -11,6 +11,7 @@ export default function Cart() {
   const [method, setMethod]   = useState('credit_card')
   const [paying, setPaying]   = useState(false)
   const navigate = useNavigate()
+  const [showQR, setShowQR] = useState(false)
 
   useEffect(() => { fetchCart() }, [])
 
@@ -36,19 +37,37 @@ export default function Cart() {
     } catch { alert('Could not remove item') }
   }
 
-  async function handleCheckout() {
-    if (items.length === 0) return
-    setPaying(true)
-    try {
-      await checkout({ payment_method: method })
-      alert('Order placed successfully!')
-      navigate('/')
-    } catch (err) {
-      alert(err.response?.data?.message || 'Checkout failed')
-    } finally {
-      setPaying(false)
-    }
+ async function handleCheckout() {
+  if (items.length === 0) return
+  if (method === 'gcash') {
+    setShowQR(true)
+    return
   }
+  setPaying(true)
+  try {
+    await checkout({ payment_method: method })
+    alert('Order placed successfully!')
+    navigate('/')
+  } catch (err) {
+    alert(err.response?.data?.message || 'Checkout failed')
+  } finally {
+    setPaying(false)
+  }
+}
+
+async function handleGcashConfirm() {
+  setPaying(true)
+  try {
+    await checkout({ payment_method: 'gcash' })
+    alert('Order placed successfully!')
+    navigate('/')
+  } catch (err) {
+    alert(err.response?.data?.message || 'Checkout failed')
+  } finally {
+    setPaying(false)
+    setShowQR(false)
+  }
+}
 
   const total = items.reduce((sum, i) => sum + Number(i.price) * i.quantity, 0)
 
@@ -144,6 +163,26 @@ export default function Cart() {
           </div>
         </div>
       )}
+        {showQR && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+          <div className="card max-w-sm w-full text-center flex flex-col items-center gap-4">
+            <h2 className="text-primary font-bold text-lg">Pay via GCash</h2>
+            <p className="text-muted text-sm">Scan the QR code to pay <span className="text-accent font-bold">₱{total.toFixed(2)}</span></p>
+            <img
+              src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=GCash-Appsteam-Payment"
+              alt="GCash QR"
+              className="w-48 h-48 rounded-lg"
+            />
+            <p className="text-muted text-xs">GCash Number: 09XX-XXX-XXXX</p>
+            <button onClick={handleGcashConfirm} disabled={paying} className="btn-primary w-full">
+              {paying ? 'Processing...' : "I've paid — Confirm Order"}
+            </button>
+            <button onClick={() => setShowQR(false)} className="text-muted text-sm hover:text-primary">
+              Cancel
+            </button>
+          </div>
+        </div>
+        )}
     </div>
   )
 }
