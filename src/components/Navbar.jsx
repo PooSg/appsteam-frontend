@@ -30,9 +30,12 @@ export default function Navbar() {
         {/* Right side */}
         {user ? (
           <div className="flex items-center gap-3">
-            <Link to="/cart" className="bg-border text-accent text-xs px-3 py-1.5 rounded-lg hover:bg-subtle transition-colors">
+            <Link to="/wishlist" className="bg-border text-accent text-xs px-3 py-1.5 rounded-lg hover:bg-subtle transition-colors">
+               Wishlist
+              </Link>
+              <Link to="/cart" className="bg-border text-accent text-xs px-3 py-1.5 rounded-lg hover:bg-subtle transition-colors">
               Cart
-            </Link>
+              </Link>
             <Link to="/profile" className="w-8 h-8 rounded-full bg-border flex items-center justify-center text-xs text-accent font-semibold hover:bg-subtle transition-colors">
               {user.username?.charAt(0).toUpperCase()}
             </Link>

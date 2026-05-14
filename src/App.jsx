@@ -13,6 +13,7 @@ import Profile from './pages/Profile'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AddGame from './pages/admin/AddGame'
 import EditGame from './pages/admin/EditGame'
+import Wishlist from './pages/Wishlist'
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
             <Route path="/game/:id"    element={<GameDetail />} />
             <Route path="/cart"        element={<Cart />} />
             <Route path="/profile"     element={<Profile />} />
+            <Route path="/wishlist"  element={<Wishlist />} />
           </Route>
 
           {/* Admin protected */}
