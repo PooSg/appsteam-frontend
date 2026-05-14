@@ -14,6 +14,7 @@ import AdminDashboard from './pages/admin/AdminDashboard'
 import AddGame from './pages/admin/AddGame'
 import EditGame from './pages/admin/EditGame'
 import Wishlist from './pages/Wishlist'
+import Orders from './pages/Orders'
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
             <Route path="/cart"        element={<Cart />} />
             <Route path="/profile"     element={<Profile />} />
             <Route path="/wishlist"  element={<Wishlist />} />
+            <Route path="/orders" element={<Orders />} />
           </Route>
 
           {/* Admin protected */}

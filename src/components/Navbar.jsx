@@ -39,6 +39,9 @@ export default function Navbar() {
             <Link to="/profile" className="w-8 h-8 rounded-full bg-border flex items-center justify-center text-xs text-accent font-semibold hover:bg-subtle transition-colors">
               {user.username?.charAt(0).toUpperCase()}
             </Link>
+            <Link to="/orders" className="bg-border text-accent text-xs px-3 py-1.5 rounded-lg hover:bg-subtle transition-colors">
+                         Orders
+                    </Link>
             <button
               onClick={handleLogout}
               className="text-xs text-muted hover:text-red-400 transition-colors"
