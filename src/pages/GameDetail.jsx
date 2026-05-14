@@ -9,7 +9,6 @@ export default function GameDetail() {
   const [loading, setLoading] = useState(true)
   const [adding, setAdding]   = useState(false)
   const [added, setAdded]     = useState(false)
-  const [owned, setOwned]     = useState(false)
   const [wishlisted, setWishlisted] = useState(false)
 
   useEffect(() => {
@@ -21,11 +20,6 @@ export default function GameDetail() {
   setWishlisted(res.data.some(w => String(w.game_id) === String(id)))
 }).catch(() => {}) 
 
-    getOrders().then(res => {
-      const allItems = res.data.flatMap(o => o.items || [])
-      const owns = allItems.some(item => String(item.game_id) === String(id))
-      setOwned(owns)
-    }).catch(() => {})
   }, [id])
 
   async function handleAddToCart() {
@@ -75,11 +69,6 @@ export default function GameDetail() {
 
           <div className="flex items-center gap-3 mb-1 flex-wrap">
             <h1 className="text-2xl font-bold text-primary">{game.title}</h1>
-            {owned && (
-              <span className="bg-green-900/40 border border-green-700 text-green-400 text-xs font-semibold px-3 py-1 rounded-full">
-                ✓ You own this game
-              </span>
-            )}
           </div>
 
           <p className="text-muted text-sm mb-3">
@@ -110,19 +99,13 @@ export default function GameDetail() {
             <p className="text-3xl font-bold text-accent mb-1">₱{Number(game.price).toFixed(2)}</p>
             <p className="text-muted text-xs mb-5">One-time purchase · Digital</p>
 
-            {owned ? (
-              <div className="w-full bg-green-900/30 border border-green-700 text-green-400 text-sm font-semibold py-2 rounded-lg text-center mb-2">
-                ✓ Already in your library
-              </div>
-            ) : (
-              <button
-                onClick={handleAddToCart}
-                disabled={adding || game.stock === 0}
-                className="btn-primary mb-2"
-              >
-                {added ? '✓ Added to cart!' : adding ? 'Adding...' : 'Add to cart'}
-              </button>
-            )}
+            <button
+              onClick={handleAddToCart}
+              disabled={adding || game.stock === 0}
+              className="btn-primary mb-2"
+                  >
+                      {added ? '✓ Added to cart!' : adding ? 'Adding...' : 'Add to cart'}
+                </button>
             <button
                 onClick={handleWishlist}
                   className="btn-outline"
