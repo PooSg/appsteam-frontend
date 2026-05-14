@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getCart, removeFromCart, checkout } from '../services/api'
+import { getCart, removeFromCart, checkout, updateCartItem } from '../services/api'
 
 const PAYMENT_METHODS = ['credit_card', 'gcash', 'paypal']
 const LABELS = { credit_card: 'Credit Card', gcash: 'GCash', paypal: 'PayPal' }
@@ -24,7 +24,11 @@ export default function Cart() {
       setLoading(false)
     }
   }
-
+  async function handleQuantity(itemId, newQty) {
+  if (newQty < 1) return
+  await updateCartItem(itemId, newQty)
+  setItems(items.map(i => i.cart_item_id === itemId ? { ...i, quantity: newQty } : i))
+}
   async function handleRemove(itemId) {
     try {
       await removeFromCart(itemId)
@@ -82,15 +86,15 @@ export default function Cart() {
                   <p className="text-primary font-semibold text-sm truncate">{item.title}</p>
                   <p className="text-muted text-xs">{item.genre || 'Game'}</p>
                 </div>
-                <p className="text-accent font-bold text-sm whitespace-nowrap">
-                  ₱{(Number(item.price) * item.quantity).toFixed(2)}
-                </p>
-                <button
-                  onClick={() => handleRemove(item.cart_item_id)}
-                  className="text-muted hover:text-red-400 text-lg leading-none transition-colors"
-                >
-                  ×
-                </button>
+                <div className="flex items-center gap-2">
+                    <button onClick={() => handleQuantity(item.cart_item_id, item.quantity - 1)} className="w-6 h-6 rounded bg-border text-primary hover:bg-subtle">−</button>
+                      <span className="text-primary text-sm w-4 text-center">{item.quantity}</span>
+                      <button onClick={() => handleQuantity(item.cart_item_id, item.quantity + 1)} className="w-6 h-6 rounded bg-border text-primary hover:bg-subtle">+</button>
+                </div>
+                        <p className="text-accent font-bold text-sm whitespace-nowrap">
+                            ₱{(Number(item.price) * item.quantity).toFixed(2)}
+                      </p>
+                      <button onClick={() => handleRemove(item.cart_item_id)} className="text-muted hover:text-red-400 text-lg leading-none transition-colors">×</button>
               </div>
             ))}
           </div>
