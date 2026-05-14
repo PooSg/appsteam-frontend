@@ -26,6 +26,7 @@ export const deleteGame    = (id)     => api.delete(`/games/${id}`)
 export const getCart       = ()       => api.get('/cart')
 export const addToCart     = (data)   => api.post('/cart', data)
 export const removeFromCart = (itemId) => api.delete(`/cart/${itemId}`)
+export const updateCartItem = (itemId, quantity) => api.put(`/cart/${itemId}`, { quantity })
 
 // Orders
 export const checkout      = (data)   => api.post('/orders/checkout', data)
