@@ -45,7 +45,7 @@ export default function Home() {
           {featured.map((game, i) => (
             <div
               key={game.game_id}
-              className={`absolute inset-0 transition-opacity duration-500 ${i === slide ? 'opacity-100' : 'opacity-0'}`}
+              className={`absolute inset-0 transition-opacity duration-500 ${i === slide ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
             >
               {game.cover_image && (
                 <img src={game.cover_image} alt={game.title} className="w-full h-full object-cover" />
