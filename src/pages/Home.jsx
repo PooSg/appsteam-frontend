@@ -9,10 +9,9 @@ export default function Home() {
   const [genre, setGenre]     = useState('All')
   const [search, setSearch]   = useState('')
   const [loading, setLoading] = useState(true)
+  const [slide, setSlide]     = useState(0)
 
-  useEffect(() => {
-    fetchGames()
-  }, [genre])
+  useEffect(() => { fetchGames() }, [genre])
 
   async function fetchGames() {
     setLoading(true)
@@ -34,49 +33,45 @@ export default function Home() {
     fetchGames()
   }
 
-const [slide, setSlide] = useState(0)
-const featured = games.slice(0, 5)
+  const featured = games.slice(0, 5)
+  function prevSlide(e) { e.stopPropagation(); setSlide(s => (s === 0 ? featured.length - 1 : s - 1)) }
+  function nextSlide(e) { e.stopPropagation(); setSlide(s => (s === featured.length - 1 ? 0 : s + 1)) }
 
-function prevSlide() { setSlide(s => (s === 0 ? featured.length - 1 : s - 1)) }
-function nextSlide() { setSlide(s => (s === featured.length - 1 ? 0 : s + 1)) }
-
-return (
-  <div>
-    {/* Hero Carousel */}
-    {featured.length > 0 && (
-      <div className="relative mb-8 rounded-xl overflow-hidden h-64 bg-border">
-        {featured.map((game, i) => (
-          <div
-            key={game.game_id}
-            className={`absolute inset-0 transition-opacity duration-500 ${i === slide ? 'opacity-100' : 'opacity-0'}`}
-          >
-            {game.cover_image && (
-              <img src={game.cover_image} alt={game.title} className="w-full h-full object-cover" />
-            )}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
-            <div className="absolute bottom-6 left-6">
-              <p className="text-white font-bold text-2xl mb-1">{game.title}</p>
-              <p className="text-gray-300 text-sm mb-3">{game.genre} · {game.description?.slice(0, 60)}...</p>
-              <a href={`/game/${game.game_id}`}
-                className="inline-block bg-accent text-white text-sm font-semibold px-4 py-1.5 rounded-lg hover:bg-blue-500 transition-colors">
-                Buy now — ₱{Number(game.price).toFixed(2)}
-              </a>
+  return (
+    <div>
+      {/* Hero Carousel */}
+      {featured.length > 0 && (
+        <div className="relative mb-8 rounded-xl overflow-hidden h-64 bg-border">
+          {featured.map((game, i) => (
+            <div
+              key={game.game_id}
+              className={`absolute inset-0 transition-opacity duration-500 ${i === slide ? 'opacity-100' : 'opacity-0'}`}
+            >
+              {game.cover_image && (
+                <img src={game.cover_image} alt={game.title} className="w-full h-full object-cover" />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+              <div className="absolute bottom-6 left-6">
+                <p className="text-white font-bold text-2xl mb-1">{game.title}</p>
+                <p className="text-gray-300 text-sm mb-3">{game.genre} · {game.description?.slice(0, 60)}...</p>
+                <a href={`/game/${game.game_id}`}
+                  className="inline-block bg-accent text-white text-sm font-semibold px-4 py-1.5 rounded-lg hover:bg-blue-500 transition-colors">
+                  Buy now — ₱{Number(game.price).toFixed(2)}
+                </a>
+              </div>
             </div>
-          </div>
-        ))}
-        {/* Arrows */}
-        <button onClick={prevSlide} className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/50 text-white w-8 h-8 rounded-full hover:bg-black/70 transition-colors">‹</button>
-        <button onClick={nextSlide} className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/50 text-white w-8 h-8 rounded-full hover:bg-black/70 transition-colors">›</button>
-        {/* Dots */}
-        <div className="absolute bottom-2 right-4 flex gap-1">
-          {featured.map((_, i) => (
-            <button key={i} onClick={() => setSlide(i)}
-              className={`w-2 h-2 rounded-full transition-colors ${i === slide ? 'bg-accent' : 'bg-white/40'}`}
-            />
           ))}
+          <button onClick={prevSlide} className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/50 text-white w-8 h-8 rounded-full hover:bg-black/70 transition-colors">‹</button>
+          <button onClick={nextSlide} className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/50 text-white w-8 h-8 rounded-full hover:bg-black/70 transition-colors">›</button>
+          <div className="absolute bottom-2 right-4 flex gap-1">
+            {featured.map((_, i) => (
+              <button key={i} onClick={(e) => { e.stopPropagation(); setSlide(i) }}
+                className={`w-2 h-2 rounded-full transition-colors ${i === slide ? 'bg-accent' : 'bg-white/40'}`}
+              />
+            ))}
+          </div>
         </div>
-      </div>
-    )}
+      )}
 
       {/* Search bar */}
       <form onSubmit={handleSearch} className="flex gap-2 mb-5">
