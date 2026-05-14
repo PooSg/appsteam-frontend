@@ -38,9 +38,14 @@ export default function AdminDashboard() {
           <h1 className="text-xl font-semibold text-primary">Admin dashboard</h1>
           <p className="text-muted text-sm">{games.length} games in catalog</p>
         </div>
-        <Link to="/admin/add" className="bg-accent text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-blue-500 transition-colors">
-          + Add game
-        </Link>
+       <div className="flex gap-2">
+             <Link to="/admin/orders" className="bg-[#1a2235] text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#243050] transition-colors border border-gray-600">
+                 Orders
+            </Link>
+              <Link to="/admin/add" className="bg-accent text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-blue-500 transition-colors">
+               + Add game
+            </Link>
+          </div>
       </div>
 
       {/* Stats row */}

@@ -15,6 +15,7 @@ import AddGame from './pages/admin/AddGame'
 import EditGame from './pages/admin/EditGame'
 import Wishlist from './pages/Wishlist'
 import Orders from './pages/Orders'
+import AdminOrders from './pages/admin/AdminOrders'
 
 export default function App() {
   return (
@@ -41,6 +42,7 @@ export default function App() {
             <Route path="/admin"           element={<AdminDashboard />} />
             <Route path="/admin/add"       element={<AddGame />} />
             <Route path="/admin/edit/:id"  element={<EditGame />} />
+            <Route path="/admin/orders" element={<AdminOrders />} />
           </Route>
 
           {/* Fallback */}
