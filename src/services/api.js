@@ -31,6 +31,11 @@ export const removeFromCart = (itemId) => api.delete(`/cart/${itemId}`)
 export const checkout      = (data)   => api.post('/orders/checkout', data)
 export const getOrders     = ()       => api.get('/orders')
 
+// Wishlist
+export const getWishlist    = ()         => api.get('/wishlist')
+export const addToWishlist  = (game_id)  => api.post('/wishlist', { game_id })
+export const removeFromWishlist = (game_id) => api.delete(`/wishlist/${game_id}`)
+
 // Profile
 export const getProfile    = ()       => api.get('/users/profile')
 export const updateProfile = (data)   => api.put('/users/profile', data)
