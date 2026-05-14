@@ -34,29 +34,49 @@ export default function Home() {
     fetchGames()
   }
 
-  const featured = games[0]
+const [slide, setSlide] = useState(0)
+const featured = games.slice(0, 5)
 
-  return (
-    <div>
-      {/* Hero — featured game */}
-      {featured && (
-        <div className="card flex gap-5 mb-8 items-center">
-          <div className="w-32 h-20 bg-border rounded-lg flex-shrink-0 overflow-hidden">
-            {featured.cover_image
-              ? <img src={featured.cover_image} alt={featured.title} className="w-full h-full object-cover" />
-              : <div className="w-full h-full flex items-center justify-center text-muted text-xs">No img</div>
-            }
+function prevSlide() { setSlide(s => (s === 0 ? featured.length - 1 : s - 1)) }
+function nextSlide() { setSlide(s => (s === featured.length - 1 ? 0 : s + 1)) }
+
+return (
+  <div>
+    {/* Hero Carousel */}
+    {featured.length > 0 && (
+      <div className="relative mb-8 rounded-xl overflow-hidden h-64 bg-border">
+        {featured.map((game, i) => (
+          <div
+            key={game.game_id}
+            className={`absolute inset-0 transition-opacity duration-500 ${i === slide ? 'opacity-100' : 'opacity-0'}`}
+          >
+            {game.cover_image && (
+              <img src={game.cover_image} alt={game.title} className="w-full h-full object-cover" />
+            )}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+            <div className="absolute bottom-6 left-6">
+              <p className="text-white font-bold text-2xl mb-1">{game.title}</p>
+              <p className="text-gray-300 text-sm mb-3">{game.genre} · {game.description?.slice(0, 60)}...</p>
+              <a href={`/game/${game.game_id}`}
+                className="inline-block bg-accent text-white text-sm font-semibold px-4 py-1.5 rounded-lg hover:bg-blue-500 transition-colors">
+                Buy now — ₱{Number(game.price).toFixed(2)}
+              </a>
+            </div>
           </div>
-          <div>
-            <p className="text-primary font-bold text-lg">{featured.title}</p>
-            <p className="text-muted text-sm mb-3">{featured.genre} · {featured.description?.slice(0, 60)}...</p>
-            <a href={`/game/${featured.game_id}`}
-              className="inline-block bg-accent text-white text-sm font-semibold px-4 py-1.5 rounded-lg hover:bg-blue-500 transition-colors">
-              Buy now — ₱{Number(featured.price).toFixed(2)}
-            </a>
-          </div>
+        ))}
+        {/* Arrows */}
+        <button onClick={prevSlide} className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/50 text-white w-8 h-8 rounded-full hover:bg-black/70 transition-colors">‹</button>
+        <button onClick={nextSlide} className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/50 text-white w-8 h-8 rounded-full hover:bg-black/70 transition-colors">›</button>
+        {/* Dots */}
+        <div className="absolute bottom-2 right-4 flex gap-1">
+          {featured.map((_, i) => (
+            <button key={i} onClick={() => setSlide(i)}
+              className={`w-2 h-2 rounded-full transition-colors ${i === slide ? 'bg-accent' : 'bg-white/40'}`}
+            />
+          ))}
         </div>
-      )}
+      </div>
+    )}
 
       {/* Search bar */}
       <form onSubmit={handleSearch} className="flex gap-2 mb-5">
