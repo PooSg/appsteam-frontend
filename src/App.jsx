@@ -16,11 +16,13 @@ import EditGame from './pages/admin/EditGame'
 import Wishlist from './pages/Wishlist'
 import Orders from './pages/Orders'
 import AdminOrders from './pages/admin/AdminOrders'
+import { Toaster } from 'react-hot-toast'
 
 export default function App() {
   return (
     <div className="min-h-screen bg-dark">
       <Navbar />
+       <Toaster position="top-right" />
       <main className="max-w-7xl mx-auto px-4 py-6">
         <Routes>
           {/* Public */}

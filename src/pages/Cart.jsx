@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getCart, removeFromCart, checkout, updateCartItem, getOrders } from '../services/api'
+import toast from 'react-hot-toast'
 
 
 const PAYMENT_METHODS = ['gcash']
@@ -47,7 +48,7 @@ export default function Cart() {
     try {
       await removeFromCart(itemId)
       setItems(items.filter(i => i.cart_item_id !== itemId))
-    } catch { alert('Could not remove item') }
+    } catch { toast.error('Could not remove item') }
   }
 
  async function handleCheckout() {
@@ -59,10 +60,10 @@ export default function Cart() {
   setPaying(true)
   try {
     await checkout({ payment_method: method, discount })
-    alert('Order placed successfully!')
+    toast.success('Order placed successfully! 🎉')
     navigate('/')
   } catch (err) {
-    alert(err.response?.data?.message || 'Checkout failed')
+    toast.error(err.response?.data?.message || 'Checkout failed')
   } finally {
     setPaying(false)
   }
@@ -72,10 +73,10 @@ async function handleGcashConfirm() {
   setPaying(true)
   try {
     await checkout({ payment_method: 'gcash', discount })
-    alert('Order placed successfully!')
+    toast.success('Order placed successfully! 🎉')
     navigate('/')
   } catch (err) {
-    alert(err.response?.data?.message || 'Checkout failed')
+    toast.error(err.response?.data?.message || 'Checkout failed')
   } finally {
     setPaying(false)
     setShowQR(false)
