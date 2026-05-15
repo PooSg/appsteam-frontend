@@ -35,11 +35,21 @@ export default function Orders() {
                   <p className="text-muted text-xs">{new Date(order.created_at).toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-accent font-bold">₱{Number(order.total_amount).toFixed(2)}</p>
-                  <span className="badge text-green-400 border-green-700 bg-green-900/30 text-xs">
-                    {order.payment_method || 'gcash'}
-                  </span>
-                </div>
+                    <p className="text-accent font-bold">₱{Number(order.total_amount).toFixed(2)}</p>
+                      <span className="badge text-green-400 border-green-700 bg-green-900/30 text-xs">
+                        {order.payment_method || 'gcash'}
+                         </span>
+                        <div className="mt-1">
+                          <span className={`text-xs font-semibold px-2 py-1 rounded-full border ${
+                             order.status === 'completed'  ? 'bg-green-900/30 text-green-400 border-green-700' :
+                             order.status === 'cancelled'  ? 'bg-red-900/30 text-red-400 border-red-700' :
+                            order.status === 'processing' ? 'bg-yellow-900/30 text-yellow-400 border-yellow-700' :
+                             'bg-gray-900/30 text-gray-400 border-gray-700'
+                                             }`}>
+                          {order.status || 'pending'}
+                          </span>
+                            </div>
+                            </div>
               </div>
 
               {order.items && order.items.length > 0 && (
