@@ -15,6 +15,7 @@ export default function Cart() {
   const navigate = useNavigate()
   const [showQR, setShowQR] = useState(false)
   const [orders, setOrders] = useState([])
+  const [address, setAddress] = useState({ name: '', street: '', city: '', phone: '' })
 
   useEffect(() => {
   fetchCart()
@@ -59,7 +60,7 @@ export default function Cart() {
   }
   setPaying(true)
   try {
-    await checkout({ payment_method: method, discount })
+    await checkout({ payment_method: method, discount, address })
     toast.success('Order placed successfully! 🎉')
     navigate('/')
   } catch (err) {
@@ -72,9 +73,9 @@ export default function Cart() {
 async function handleGcashConfirm() {
   setPaying(true)
   try {
-    await checkout({ payment_method: 'gcash', discount })
+    await checkout({ payment_method: 'gcash', discount, address })
     toast.success('Order placed successfully! 🎉')
-    navigate('/')
+    navigate('/orders')
   } catch (err) {
     toast.error(err.response?.data?.message || 'Checkout failed')
   } finally {
@@ -156,6 +157,36 @@ const finalTotal = total - discount
             </div>
 
             {/* Payment method */}
+              {/* Delivery Address */}
+<p className="text-xs text-muted mt-1">Delivery address</p>
+<input
+  type="text"
+  placeholder="Full name"
+  value={address.name}
+  onChange={e => setAddress({ ...address, name: e.target.value })}
+  className="w-full text-sm bg-[#0f1724] border border-gray-600 rounded px-3 py-2 text-white"
+/>
+<input
+  type="text"
+  placeholder="Street address"
+  value={address.street}
+  onChange={e => setAddress({ ...address, street: e.target.value })}
+  className="w-full text-sm bg-[#0f1724] border border-gray-600 rounded px-3 py-2 text-white"
+/>
+<input
+  type="text"
+  placeholder="City"
+  value={address.city}
+  onChange={e => setAddress({ ...address, city: e.target.value })}
+  className="w-full text-sm bg-[#0f1724] border border-gray-600 rounded px-3 py-2 text-white"
+/>
+<input
+  type="text"
+  placeholder="Phone number"
+  value={address.phone}
+  onChange={e => setAddress({ ...address, phone: e.target.value })}
+  className="w-full text-sm bg-[#0f1724] border border-gray-600 rounded px-3 py-2 text-white"
+/>
             <p className="text-xs text-muted mt-1">Payment method</p>
             <div className="flex flex-col gap-2">
               {PAYMENT_METHODS.map(m => (
