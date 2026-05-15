@@ -14,7 +14,39 @@ export default function Orders() {
       .finally(() => setLoading(false))
   }, [])
 
-  if (loading) return <div className="text-center mt-20 text-muted">Loading...</div>
+  if (loading) return (
+  <div className="max-w-4xl mx-auto">
+    <h1 className="text-xl font-semibold text-primary mb-6">Order History</h1>
+    <div className="flex flex-col gap-4">
+      {[...Array(4)].map((_, i) => (
+        <div key={i} className="card animate-pulse">
+          <div className="flex justify-between items-center mb-3">
+            <div className="flex flex-col gap-2">
+              <div className="h-4 bg-border rounded w-24" />
+              <div className="h-3 bg-border rounded w-32" />
+            </div>
+            <div className="flex flex-col gap-2 items-end">
+              <div className="h-4 bg-border rounded w-20" />
+              <div className="h-3 bg-border rounded w-16" />
+            </div>
+          </div>
+          <div className="border-t border-border pt-3 flex flex-col gap-3">
+            {[...Array(2)].map((_, j) => (
+              <div key={j} className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-border rounded-lg" />
+                <div className="flex-1 flex flex-col gap-1">
+                  <div className="h-3 bg-border rounded w-1/2" />
+                  <div className="h-3 bg-border rounded w-1/4" />
+                </div>
+                <div className="h-4 bg-border rounded w-16" />
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)
 
   return (
     <div className="max-w-4xl mx-auto">
