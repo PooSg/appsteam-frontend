@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getCart, removeFromCart, checkout, updateCartItem } from '../services/api'
+import { getCart, removeFromCart, checkout, updateCartItem, getOrders } from '../services/api'
+
 
 const PAYMENT_METHODS = ['gcash']
 const LABELS = { gcash: 'GCash' }
@@ -12,8 +13,12 @@ export default function Cart() {
   const [paying, setPaying]   = useState(false)
   const navigate = useNavigate()
   const [showQR, setShowQR] = useState(false)
+  const [orders, setOrders] = useState([])
 
-  useEffect(() => { fetchCart() }, [])
+  useEffect(() => {
+  fetchCart()
+  fetchOrders()
+}, [])
 
   async function fetchCart() {
     try {
@@ -25,6 +30,14 @@ export default function Cart() {
       setLoading(false)
     }
   }
+  async function fetchOrders() {
+  try {
+    const res = await getOrders()
+    setOrders(res.data)
+  } catch {
+    setOrders([])
+  }
+}
   async function handleQuantity(itemId, newQty) {
   if (newQty < 1) return
   await updateCartItem(itemId, newQty)
@@ -45,7 +58,7 @@ export default function Cart() {
   }
   setPaying(true)
   try {
-    await checkout({ payment_method: method })
+    await checkout({ payment_method: method, discount })
     alert('Order placed successfully!')
     navigate('/')
   } catch (err) {
@@ -58,7 +71,7 @@ export default function Cart() {
 async function handleGcashConfirm() {
   setPaying(true)
   try {
-    await checkout({ payment_method: 'gcash' })
+    await checkout({ payment_method: 'gcash', discount })
     alert('Order placed successfully!')
     navigate('/')
   } catch (err) {
@@ -70,6 +83,9 @@ async function handleGcashConfirm() {
 }
 
   const total = items.reduce((sum, i) => sum + Number(i.price) * i.quantity, 0)
+const isNewBuyer = orders.length === 0
+const discount = isNewBuyer ? total * 0.10 : 0
+const finalTotal = total - discount
 
   if (loading) return <div className="text-center mt-20 text-muted">Loading cart...</div>
 
@@ -127,12 +143,15 @@ async function handleGcashConfirm() {
               <span className="text-primary">₱{total.toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-muted">Discount</span>
-              <span className="text-green-400">−₱0.00</span>
+            <span className="text-muted">Discount</span>
+            <span className="text-green-400">−₱{discount.toFixed(2)}</span>
             </div>
+            {isNewBuyer && (
+            <p className="text-green-400 text-xs">🎉 10% new buyer discount applied!</p>
+    )}
             <div className="border-t border-border pt-3 flex justify-between font-semibold">
-              <span className="text-primary">Total</span>
-              <span className="text-accent text-lg">₱{total.toFixed(2)}</span>
+            <span className="text-primary">Total</span>
+            <span className="text-accent text-lg">₱{finalTotal.toFixed(2)}</span>
             </div>
 
             {/* Payment method */}
