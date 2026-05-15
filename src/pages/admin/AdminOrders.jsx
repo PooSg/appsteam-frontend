@@ -20,6 +20,12 @@ export default function AdminOrders() {
     fetchOrders();
   };
 
+  const deleteOrder = async (orderId) => {
+    if (!confirm('Delete this order?')) return
+    await api.delete(`/admin/orders/${orderId}`)
+    fetchOrders()
+  };
+
   return (
     <div className="p-6 text-white">
       <h1 className="text-2xl font-bold mb-6">Order Management</h1>
@@ -38,20 +44,20 @@ export default function AdminOrders() {
                 <p className="font-bold">₱{parseFloat(order.total_amount).toFixed(2)}</p>
                 <p className="text-sm text-green-400">{order.payment_method}</p>
                 <select
-  value={order.status || "pending"}
-  onChange={(e) => updateStatus(order.order_id, e.target.value)}
-  className="mt-1 bg-[#0f1724] text-sm border border-gray-600 rounded px-2 py-1 text-white"
->
-  {STATUS_OPTIONS.map((s) => (
-    <option key={s} value={s}>{s}</option>
-  ))}
-</select>
-<button
-  onClick={() => deleteOrder(order.order_id)}
-  className="mt-1 text-xs text-red-400 hover:text-red-300 border border-red-800 rounded px-2 py-1 w-full"
->
-  Delete
-</button>
+                  value={order.status || "pending"}
+                  onChange={(e) => updateStatus(order.order_id, e.target.value)}
+                  className="mt-1 bg-[#0f1724] text-sm border border-gray-600 rounded px-2 py-1 text-white"
+                >
+                  {STATUS_OPTIONS.map((s) => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+                <button
+                  onClick={() => deleteOrder(order.order_id)}
+                  className="mt-1 text-xs text-red-400 hover:text-red-300 border border-red-800 rounded px-2 py-1 w-full"
+                >
+                  Delete
+                </button>
               </div>
             </div>
             <div className="space-y-2">
