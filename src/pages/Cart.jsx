@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getCart, removeFromCart, checkout, updateCartItem } from '../services/api'
 
-const PAYMENT_METHODS = ['credit_card', 'gcash', 'paypal']
-const LABELS = { credit_card: 'Credit Card', gcash: 'GCash', paypal: 'PayPal' }
+const PAYMENT_METHODS = ['gcash']
+const LABELS = { gcash: 'GCash' }
 
 export default function Cart() {
   const [items, setItems]     = useState([])
   const [loading, setLoading] = useState(true)
-  const [method, setMethod]   = useState('credit_card')
+  const [method, setMethod] = useState('gcash')
   const [paying, setPaying]   = useState(false)
   const navigate = useNavigate()
   const [showQR, setShowQR] = useState(false)
