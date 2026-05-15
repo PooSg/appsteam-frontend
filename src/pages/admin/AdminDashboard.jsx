@@ -103,8 +103,34 @@ export default function AdminDashboard() {
 
       {/* Table */}
       {loading ? (
-        <div className="text-center text-muted py-20">Loading...</div>
-      ) : (
+  <div className="card overflow-x-auto p-0 animate-pulse">
+    <table className="w-full text-sm">
+      <thead>
+        <tr className="border-b border-border">
+          {['Title', 'Genre', 'Price', 'Stock', 'Actions'].map(h => (
+            <th key={h} className="text-left text-xs text-muted font-medium px-4 py-3">{h}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {[...Array(6)].map((_, i) => (
+          <tr key={i} className="border-b border-border/50">
+            <td className="px-4 py-3">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-border rounded" />
+                <div className="h-3 bg-border rounded w-32" />
+              </div>
+            </td>
+            <td className="px-4 py-3"><div className="h-3 bg-border rounded w-20" /></td>
+            <td className="px-4 py-3"><div className="h-3 bg-border rounded w-16" /></td>
+            <td className="px-4 py-3"><div className="h-3 bg-border rounded w-8" /></td>
+            <td className="px-4 py-3"><div className="h-3 bg-border rounded w-16" /></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+) : (
         <div className="card overflow-x-auto p-0">
           <table className="w-full text-sm">
             <thead>
