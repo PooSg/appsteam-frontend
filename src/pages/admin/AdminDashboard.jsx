@@ -29,7 +29,9 @@ export default function AdminDashboard() {
       const res = await api.get('/admin/orders')
       const orders = res.data
       setTotalOrders(orders.length)
-      const revenue = orders.reduce((sum, o) => sum + parseFloat(o.total_amount || 0), 0)
+     const revenue = orders
+  .filter(o => o.status === 'completed')
+  .reduce((sum, o) => sum + parseFloat(o.total_amount || 0), 0)
       setTotalRevenue(revenue)
     } catch {}
   }
