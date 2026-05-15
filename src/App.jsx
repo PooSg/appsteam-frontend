@@ -17,6 +17,7 @@ import Wishlist from './pages/Wishlist'
 import Orders from './pages/Orders'
 import AdminOrders from './pages/admin/AdminOrders'
 import { Toaster } from 'react-hot-toast'
+import Receipt from './pages/Receipt'
 
 export default function App() {
   return (
@@ -37,6 +38,7 @@ export default function App() {
             <Route path="/profile"     element={<Profile />} />
             <Route path="/wishlist"  element={<Wishlist />} />
             <Route path="/orders" element={<Orders />} />
+            <Route path="/receipt" element={<Receipt />} />
           </Route>
 
           {/* Admin protected */}

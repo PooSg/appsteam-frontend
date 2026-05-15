@@ -75,7 +75,7 @@ async function handleGcashConfirm() {
   try {
     await checkout({ payment_method: 'gcash', discount, address })
     toast.success('Order placed successfully! 🎉')
-    navigate('/orders')
+    navigate('/receipt')
   } catch (err) {
     toast.error(err.response?.data?.message || 'Checkout failed')
   } finally {
