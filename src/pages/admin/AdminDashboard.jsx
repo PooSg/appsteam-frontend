@@ -10,6 +10,7 @@ export default function AdminDashboard() {
   const [search, setSearch]   = useState('')
   const [totalOrders, setTotalOrders]   = useState(0)
   const [totalRevenue, setTotalRevenue] = useState(0)
+  const [orders, setOrders] = useState([])
 
   useEffect(() => {
     fetchGames()
@@ -28,8 +29,8 @@ export default function AdminDashboard() {
   async function fetchOrderStats() {
     try {
       const res = await api.get('/admin/orders')
-      const orders = res.data
-      setTotalOrders(orders.length)
+      setOrders(res.data)
+setTotalOrders(res.data.length)
      const revenue = orders
   .filter(o => o.status === 'completed')
   .reduce((sum, o) => sum + parseFloat(o.total_amount || 0), 0)
