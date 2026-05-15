@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getGames, deleteGame } from '../../services/api'
 import api from '../../services/api'
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 
 export default function AdminDashboard() {
   const [games, setGames]     = useState([])
@@ -91,9 +92,35 @@ export default function AdminDashboard() {
           <p className="text-green-400 text-2xl font-semibold">₱{totalRevenue.toFixed(2)}</p>
         </div>
       </div>
+        
+      {/* Sales Chart */}
+<div className="bg-card border border-border rounded-xl p-4 mb-6">
+  <h2 className="text-primary font-semibold text-sm mb-4">Revenue Over Time</h2>
+  <ResponsiveContainer width="100%" height={200}>
+    <LineChart data={(() => {
+      const grouped = {}
+      orders.forEach(o => {
+        if (o.status !== 'completed') return
+        const date = new Date(o.created_at).toLocaleDateString('en-PH', { month: 'short', day: 'numeric' })
+        grouped[date] = (grouped[date] || 0) + parseFloat(o.total_amount || 0)
+      })
+      return Object.entries(grouped).map(([date, revenue]) => ({ date, revenue }))
+    })()}>
+      <CartesianGrid strokeDasharray="3 3" stroke="#1e2d40" />
+      <XAxis dataKey="date" tick={{ fill: '#6b7280', fontSize: 11 }} />
+      <YAxis tick={{ fill: '#6b7280', fontSize: 11 }} />
+      <Tooltip
+        contentStyle={{ backgroundColor: '#0f1724', border: '1px solid #1e2d40', borderRadius: '8px' }}
+        labelStyle={{ color: '#e2e8f0' }}
+        formatter={(val) => [`₱${val.toFixed(2)}`, 'Revenue']}
+      />
+      <Line type="monotone" dataKey="revenue" stroke="#38bdf8" strokeWidth={2} dot={{ fill: '#38bdf8' }} />
+    </LineChart>
+  </ResponsiveContainer>
+</div>
 
-      {/* Search */}
-      <input
+{/* Search */}
+<input
         type="text"
         placeholder="Search games..."
         value={search}
