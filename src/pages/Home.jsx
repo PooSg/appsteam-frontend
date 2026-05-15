@@ -111,8 +111,19 @@ export default function Home() {
       </h2>
 
       {loading ? (
-        <div className="text-center text-muted py-20">Loading games...</div>
-      ) : games.length === 0 ? (
+  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+    {[...Array(10)].map((_, i) => (
+      <div key={i} className="bg-card border border-border rounded-xl overflow-hidden animate-pulse">
+        <div className="w-full h-40 bg-border" />
+        <div className="p-3 flex flex-col gap-2">
+          <div className="h-4 bg-border rounded w-3/4" />
+          <div className="h-3 bg-border rounded w-1/2" />
+          <div className="h-4 bg-border rounded w-1/3 mt-1" />
+        </div>
+      </div>
+    ))}
+  </div>
+) : games.length === 0 ? (
         <div className="text-center text-muted py-20">No games found.</div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
